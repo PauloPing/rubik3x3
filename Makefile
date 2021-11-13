@@ -1,22 +1,16 @@
 CC = gcc
 CFLAGS = -Wall -g
+SRCDIR = src/
 BINDIR = bin/
-# SRCDIR = src/
 MODELEDIR = src/modele/
 VUEDIR = src/vue/
-OBJS = main.o
-MAINFILE = main
+OBJS =  main.o methode.o
 
-all : $(BINDIR)$(OBJS) $(MAINFILE) go
+all : $(OBJS)
 
-$(BINDIR)%.o : $(MODELEDIR)%.c $(VUEDIR)%.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-main : $(BINDIR)$(OBJS)
-	$(CC) $< -o $@
-
-go : 
-	./$(MAINFILE)
+%.o : $(MODELEDIR)%.c
+	$(CC) $(CFLAGS) -c $<
+	mv $@ $(BINDIR)
 
 
 
