@@ -99,6 +99,5 @@ int main(int argc, char *argv[])
     Face *rubikube;
     rubikube = creerRubikube();
     printRubikube(rubikube);
-
     return 0;
 }
