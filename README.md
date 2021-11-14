@@ -2,7 +2,7 @@
 
 - Equipe : Louis VANOISE & Paul LEBLOND
 
-# To open the graphical interface :
+## To open the graphical interface :
 
 _Install gtk with brew :_
 
