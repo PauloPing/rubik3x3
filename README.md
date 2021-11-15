@@ -8,3 +8,5 @@ _Install gtk with brew :_
 
     > brew install gtk+3
     > make
+
+https://cubesolve.com/comment-resoudre-le-cube-rubik-fr/
