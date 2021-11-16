@@ -9,37 +9,63 @@
 char *printCellule(Cellule c)
 {
     enum Color color = c.color;
-    switch(color)
+    switch (color)
     {
-        case ROUGE:
-            return "ROUGE";
-            break;
-        case BLEU:
-            return "BLEU";
-            break;
-        case JAUNE:
-            return "JAUNE";
-            break;
-        case ORANGE:
-            return "ORANGE";
-            break;
-        case BLANC:
-            return "BLANC";
-            break;
-        case VERT:
-            return "VERT";
-            break;
+    case ROUGE:
+        return "ROUGE";
+        break;
+    case BLEU:
+        return "BLEU";
+        break;
+    case JAUNE:
+        return "JAUNE";
+        break;
+    case ORANGE:
+        return "ORANGE";
+        break;
+    case BLANC:
+        return "BLANC";
+        break;
+    case VERT:
+        return "VERT";
+        break;
+    }
+}
+
+char *color(Cellule c)
+{
+    enum Color color = c.color;
+    switch (color)
+    {
+    case ROUGE:
+        return "\x1b[31m";
+        break;
+    case BLEU:
+        return "\x1b[34m";
+        break;
+    case JAUNE:
+        return "\x1b[35m";
+        break;
+    case ORANGE:
+        return "\x1b[33m";
+        break;
+    case BLANC:
+        return "\x1b[37m";
+        break;
+    case VERT:
+        return "\x1b[32m";
+        break;
     }
 }
 
 void printFace(Face face)
 {
-    int i,j;
-    for (i = 0; i < TAILLE_MATRICE;i++)
+    int i, j;
+    for (i = 0; i < TAILLE_MATRICE; i++)
     {
         for (j = 0; j < TAILLE_MATRICE; j++)
         {
-            printf("%s ",printCellule(face.tab[i][j]));
+            printf("%s ", printCellule(face.tab[i][j]));
         }
         printf("\n");
     }
@@ -47,26 +73,25 @@ void printFace(Face face)
 
 void printRubikube(Face *rubikube)
 {
-    for (int i = 0; i < NB_FACE;i++)
+    for (int i = 0; i < NB_FACE; i++)
     {
         printFace(rubikube[i]);
     }
 }
 
-Face creerFace(enum Direction dir,enum Color color)
+Face *creerFace(enum Direction dir, enum Color color)
 {
-    Face newFace;
-    newFace.dir = dir;
-    Cellule **tab;
-    tab = malloc(sizeof(Cellule)*(TAILLE_MATRICE));
-    for (int k = 0; k < TAILLE_MATRICE;k++)
+    Face *newFace = malloc(sizeof(Face));
+    newFace->dir = dir;
+    Cellule **tab = malloc(sizeof(Cellule) * (TAILLE_MATRICE));
+    for (int k = 0; k < TAILLE_MATRICE; k++)
     {
-        tab[k] = malloc(sizeof(Cellule)*(TAILLE_MATRICE));
+        tab[k] = malloc(sizeof(Cellule) * (TAILLE_MATRICE));
     }
-    int i,j;
-    for (i = 0; i < TAILLE_MATRICE;i++)
+    int i, j;
+    for (i = 0; i < TAILLE_MATRICE; i++)
     {
-        for (j = 0; j < TAILLE_MATRICE;j++)
+        for (j = 0; j < TAILLE_MATRICE; j++)
         {
             Cellule c;
             c.color = color;
@@ -76,28 +101,79 @@ Face creerFace(enum Direction dir,enum Color color)
             tab[i][j] = c;
         }
     }
-    newFace.tab = tab;
+    newFace->tab = tab;
     return newFace;
 }
 
-Face *creerRubikube()
+void creerRubikube(Face *rubikube[])
 {
-    Face *rubikube = malloc(sizeof(Face)*NB_FACE);
-    for (int i = 0; i < NB_FACE;i++)
+    for (int i = 0; i < NB_FACE; i++)
     {
-        Face face = creerFace(i,i);
+        Face *face = creerFace(i, i);
         rubikube[i] = face;
     }
-    return rubikube;
 }
 
+void printTerminalFace(Face *face)
+{
+    int nbEspace = 12;
+    for (int j = 0; j < nbEspace; j++)
+        printf(" ");
+    printf("\x1b[30m - - - - -\n");
+    int i, j;
+    for (i = 0; i < TAILLE_MATRICE; i++)
+    {
+        for (int j = 0; j < nbEspace; j++)
+            printf(" ");
+        printf("|");
+        for (j = 0; j < TAILLE_MATRICE; j++)
+        {
+            printf("%s %d \x1b[0m", color(face->tab[i][j]), face->tab[i][j].x * 3 + face->tab[i][j].y); //  + face->tab[i]->y * TAILLE_MATRICE
+        }
+        printf("\x1b[30m|\n");
+    }
+    for (int j = 0; j < nbEspace; j++)
+        printf(" ");
+    printf(" - - - - -\n");
+}
 
+void printTerminalRubikCube(Face *rubikube[])
+{
+    int nbFaceMilieu = NB_FACE - 2;
+    int i, j, k;
+    printTerminalFace(rubikube[HAUT]);
+    for (i = 0; i < nbFaceMilieu; i++)
+    {
+        printf("\x1b[30m - - - - -  ");
+    }
+    printf("\n");
+    for (i = 0; i < TAILLE_MATRICE; i++)
+    {
+        for (j = 1; j < nbFaceMilieu + 1; j++)
+        {
+            printf("\x1b[30m|");
 
+            for (k = 0; k < TAILLE_MATRICE; k++)
+            {
+                printf("%s %d ", color(rubikube[j]->tab[i][k]), rubikube[j]->tab[i][k].x * 3 + rubikube[j]->tab[i][k].y); //  + face->tab[i]->y * TAILLE_MATRICE
+            }
+            printf("\x1b[30m| ");
+        }
+        printf("\n");
+    }
+    for (i = 0; i < nbFaceMilieu; i++)
+    {
+        printf("\x1b[30m - - - - -  ");
+    }
+    printf("\n");
+    printTerminalFace(rubikube[BAS]);
+}
 
 int main(int argc, char *argv[])
 {
-    Face *rubikube;
-    rubikube = creerRubikube();
-    printRubikube(rubikube);
+    Face *rubikube[NB_FACE];
+    creerRubikube(rubikube);
+    // printRubikube(rubikube);
+    printTerminalRubikCube(rubikube);
     return 0;
 }

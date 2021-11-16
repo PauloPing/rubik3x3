@@ -1,9 +1,25 @@
 #define NB_FACE 6
 #define TAILLE_MATRICE 3
 
-enum Color { ROUGE,BLEU,JAUNE,VERT,BLANC,ORANGE};
+enum Color
+{
+    BLANC,
+    VERT,
+    ROUGE,
+    BLEU,
+    ORANGE,
+    JAUNE,
+};
 
-enum Direction {DEVANT,DERRIERE,GAUCHE,DROITE,HAUT,BAS};
+enum Direction
+{
+    HAUT,
+    GAUCHE,
+    DEVANT,
+    DROITE,
+    DERRIERE,
+    BAS,
+};
 
 typedef struct face Face;
 
@@ -11,14 +27,13 @@ struct cel
 {
     enum Color color;
     Face *face;
-    int x,y;
-}cellule;
+    int x, y;
+} cellule;
 typedef struct cel Cellule;
 
 struct face
 {
     enum Direction dir;
     Cellule **tab;
-}face;
+} face;
 typedef struct face Face;
-
