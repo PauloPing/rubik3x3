@@ -12,8 +12,7 @@ enum Color
 };
 
 enum Direction
-{
-    HAUT,
+{   HAUT,
     GAUCHE,
     DEVANT,
     DROITE,
@@ -27,7 +26,7 @@ struct cel
 {
     enum Color color;
     Face *face;
-    int x, y;
+    int val;
 } cellule;
 typedef struct cel Cellule;
 

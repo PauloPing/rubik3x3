@@ -81,6 +81,7 @@ void printRubikube(Face *rubikube)
 
 Face *creerFace(enum Direction dir, enum Color color)
 {
+    int val = 0;
     Face *newFace = malloc(sizeof(Face));
     newFace->dir = dir;
     Cellule **tab = malloc(sizeof(Cellule) * (TAILLE_MATRICE));
@@ -95,8 +96,7 @@ Face *creerFace(enum Direction dir, enum Color color)
         {
             Cellule c;
             c.color = color;
-            c.x = i;
-            c.y = j;
+            c.val = val++;
             printCellule(c);
             tab[i][j] = c;
         }
@@ -128,7 +128,7 @@ void printTerminalFace(Face *face)
         printf("|");
         for (j = 0; j < TAILLE_MATRICE; j++)
         {
-            printf("%s %d \x1b[0m", color(face->tab[i][j]), face->tab[i][j].x * 3 + face->tab[i][j].y); //  + face->tab[i]->y * TAILLE_MATRICE
+            printf("%s %d \x1b[0m", color(face->tab[i][j]), face->tab[i][j].val); //  + face->tab[i]->y * TAILLE_MATRICE
         }
         printf("\x1b[30m|\n");
     }
@@ -155,7 +155,7 @@ void printTerminalRubikCube(Face *rubikube[])
 
             for (k = 0; k < TAILLE_MATRICE; k++)
             {
-                printf("%s %d ", color(rubikube[j]->tab[i][k]), rubikube[j]->tab[i][k].x * 3 + rubikube[j]->tab[i][k].y); //  + face->tab[i]->y * TAILLE_MATRICE
+                printf("%s %d ", color(rubikube[j]->tab[i][k]), rubikube[j]->tab[i][k].val); //  + face->tab[i]->y * TAILLE_MATRICE
             }
             printf("\x1b[30m| ");
         }
@@ -168,6 +168,8 @@ void printTerminalRubikCube(Face *rubikube[])
     printf("\n");
     printTerminalFace(rubikube[BAS]);
 }
+
+
 
 int main(int argc, char *argv[])
 {
