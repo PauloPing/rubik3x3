@@ -58,14 +58,14 @@ char *color(Cellule c)
     }
 }
 
-void printFace(Face face)
+void printFace(Face *face)
 {
     int i, j;
     for (i = 0; i < TAILLE_MATRICE; i++)
     {
         for (j = 0; j < TAILLE_MATRICE; j++)
         {
-            printf("%s ", printCellule(face.tab[i][j]));
+            printf("%s ", printCellule(face->tab[i][j]));
         }
         printf("\n");
     }
@@ -75,7 +75,7 @@ void printRubikube(Face *rubikube)
 {
     for (int i = 0; i < NB_FACE; i++)
     {
-        printFace(rubikube[i]);
+        printFace(&rubikube[i]);
     }
 }
 
@@ -168,6 +168,8 @@ void printTerminalRubikCube(Face *rubikube[])
     printf("\n");
     printTerminalFace(rubikube[BAS]);
 }
+
+
 
 
 
