@@ -12,7 +12,7 @@ enum Color
 };
 
 enum Direction
-{   
+{
     HAUT,
     GAUCHE,
     DEVANT,
