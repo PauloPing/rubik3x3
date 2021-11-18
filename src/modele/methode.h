@@ -1,0 +1,13 @@
+void rotationLigneHautVersDroite(Face **);
+void rotationLigneHautVersGauche(Face **);
+void rotationLigneBasVersDroite(Face **);
+void rotationLigneBasVersGauche(Face **);
+void rotationColonneGaucheVersHaut(Face **);
+void rotationColonneGaucheVersBas(Face **);
+void rotationColonneGaucheVersBas(Face **);
+void rotationColonneDroiteVersHaut(Face **);
+void rotationColonneDroiteVersBas(Face **);
+void rotationFaceArriereVersDroite(Face **);
+void rotationFaceArriereVersGauche(Face **);
+void rotationFaceAvantVersGauche(Face **);
+void rotationFaceAvantVersDroite(Face **);
