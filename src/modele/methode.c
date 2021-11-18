@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include "struct.h"
 
-void permuteCellule(Cellule *c1, Cellule *c2)
+void permuteCellule(Cellule *c1,Cellule *c2)
 {
-  Cellule *c3;
-  c3 = c1;
-  c1 = c2;
-  c1->face = c3->face;
+    Cellule c3;
+    c3.color = c1->color;
+    c3.face = c1->face;
+    c3.val = c1->val;
+    c1->color = c2->color;
+    c1->face = c2->face;
+    c1->val = c2->val;
+    c2->color = c3.color;
+    c2->face = c3.face;
+    c2->val = c3.val;
 }
+
 Face *getFace(enum Direction dir, Face *rubikube)
 {
   switch (dir)
@@ -44,20 +51,14 @@ void setFace(Face *face, enum Direction dir, Face *rubikube)
   }
 }
 
-void rotateLigneHaut(Face *rubikube)
+void rotationLigneHaut(Face *rubikube)
 {
-  Face *avant = getFace(DEVANT, rubikube);
-  Face *derrier = getFace(DERRIERE, rubikube);
-  Face *gauhe = getFace(GAUCHE, rubikube);
-  Face *droite = getFace(DROITE, rubikube);
-  Face *haut = getFace(HAUT, rubikube);
-  Face *bas = getFace(BAS, rubikube);
-
-  // Face avant -> Face droite
-  droite->tab[0][0] = avant->tab[0][0];
-  droite->tab[0][1] = avant->tab[0][1];
-  droite->tab[0][2] = avant->tab[0][2];
-  setFace(droite, DROITE, rubikube);
+  // Face AVANT -> Face DROITE
+  Face *droite = getFace(DROITE,rubikube);
+  Face *avant = getFace(DEVANT,rubikube);
+  permuteCellule(&droite->tab[0][0],&avant->tab[0][0]);
+  permuteCellule(&droite->tab[0][1],&avant->tab[0][1]);
+  permuteCellule(&droite->tab[0][2],&avant->tab[0][2]);
 }
 
 int main(void)
