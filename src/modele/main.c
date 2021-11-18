@@ -1,12 +1,12 @@
 #include <stdio.h>
-// #include "struct.h"
 #include <stdlib.h>
 #include <string.h>
-// #include "methode.h"
+#include <time.h>
 #include "methode.c"
 
 #define TRUE 1
 #define FALSE 0
+#define NB_MOUVEMENT 100
 
 char *printCellule(Cellule c)
 {
@@ -57,27 +57,6 @@ char *color(Cellule c)
     case VERT:
         return "\x1b[32m";
         break;
-    }
-}
-
-void printFace(Face *face)
-{
-    int i, j;
-    for (i = 0; i < TAILLE_MATRICE; i++)
-    {
-        for (j = 0; j < TAILLE_MATRICE; j++)
-        {
-            printf("%s ", printCellule(face->tab[i][j]));
-        }
-        printf("\n");
-    }
-}
-
-void printRubikube(Face *rubikube)
-{
-    for (int i = 0; i < NB_FACE; i++)
-    {
-        printFace(&rubikube[i]);
     }
 }
 
@@ -165,14 +144,23 @@ void printTerminalRubikCube(Face *rubikube[])
     }
     for (i = 0; i < nbFaceMilieu; i++)
     {
-        printf("\x1b[30m - - - - -  ");
+        printf("\x1b[30m - - - - -");
     }
     printf("\n");
     printTerminalFace(rubikube[BAS]);
+    printf("\x1b[0m");
 }
 
-void melangerRubkik(Face *rubikube[])
+void melangerRubikCube(Face *rubikube[])
 {
+    srand(time(NULL));
+    int r, i = 0;
+    for (i = 0; i < NB_MOUVEMENT; i++)
+    {
+        r = rand() % (NB_FUNCTION);
+        void (*fun_ptr)(Face * rubikube[]) = mouvement[r];
+        (*fun_ptr)(rubikube);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -180,7 +168,8 @@ int main(int argc, char *argv[])
     Face *rubikube[NB_FACE];
     creerRubikube(rubikube);
     // printRubikube(rubikube);
-    rotationColonneGaucheVersHaut(rubikube);
+    // rotationColonneGaucheVersHaut(rubikube);
+    melangerRubikCube(rubikube);
     printTerminalRubikCube(rubikube);
     return 0;
 }

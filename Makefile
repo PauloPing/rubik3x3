@@ -16,7 +16,7 @@ OBJSVUE = $(BINDIR)mainVue.o
 
 all : $(OBJS) executer # $(OBJSVUE) mainVue
 
-$(BINDIR)%.o : $(MODELEDIR)%.c $(MODELEDIR)%.h
+$(BINDIR)%.o : $(MODELEDIR)%.c
 	$(CC) $(CCFLAGS) -c $< -o $@
 	$(CC) $(CCFLAGS) $(BINDIR)main.o -o main
 
