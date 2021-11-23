@@ -6,7 +6,7 @@
 
 #define TRUE 1
 #define FALSE 0
-#define NB_MOUVEMENT 100
+#define NB_MOUVEMENT 1000
 
 char *printCellule(Cellule c)
 {
@@ -163,13 +163,23 @@ void melangerRubikCube(Face *rubikube[])
     }
 }
 
+void croixBlanche(Face *rubikube[])
+{ 
+  while (isValideCroixBlanche(rubikube) == 0)
+  {
+    // melangerRubikCube(rubikube);
+    extremiteCroixBlanche(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+  }
+}
+
 int main(int argc, char *argv[])
 {
     Face *rubikube[NB_FACE];
     creerRubikube(rubikube);
-    // printRubikube(rubikube);
-    // rotationColonneGaucheVersHaut(rubikube);
     melangerRubikCube(rubikube);
+    milieuFace(rubikube);
+    extremiteCroixBlanche(rubikube);
     printTerminalRubikCube(rubikube);
     return 0;
 }
