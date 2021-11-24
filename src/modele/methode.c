@@ -94,7 +94,7 @@ void U(Face *rubikube[])
   permuteCellule(&haut->tab[0][0], &haut->tab[2][0]);
 }
 
-void ré(Face *rubikube[])
+void D(Face *rubikube[])
 {
   // Face AVANT -> Face DROITE
   Face *droite = getFace(DROITE, rubikube);
@@ -122,7 +122,7 @@ void ré(Face *rubikube[])
   permuteCellule(&bas->tab[0][0], &bas->tab[2][0]);
 }
 
-void réPrime(Face *rubikube[])
+void DPrime(Face *rubikube[])
 {
   // Face AVANT -> Face GAUCHE
   Face *gauche = getFace(GAUCHE, rubikube);
@@ -587,37 +587,6 @@ void tournerRubikubeVersHaut(Face *rubikube[])
   switchFace(avant,haut);
 
   // rotation face gauche
-  permuteCellule(&gauche->tab[0][0], &gauche->tab[0][2]);
-  permuteCellule(&gauche->tab[0][1], &gauche->tab[1][2]);
-  permuteCellule(&gauche->tab[0][1], &gauche->tab[1][0]);
-  permuteCellule(&gauche->tab[0][0], &gauche->tab[2][2]);
-  permuteCellule(&gauche->tab[1][0], &gauche->tab[2][1]);
-  permuteCellule(&gauche->tab[0][0], &gauche->tab[2][0]);
-  // rotation face droite
-  permuteCellule(&droite->tab[0][0], &droite->tab[2][0]);
-  permuteCellule(&droite->tab[1][0], &droite->tab[0][1]);
-  permuteCellule(&droite->tab[0][0], &droite->tab[0][2]);
-  permuteCellule(&droite->tab[0][1], &droite->tab[2][1]);
-  permuteCellule(&droite->tab[0][1], &droite->tab[1][2]);
-  permuteCellule(&droite->tab[0][2], &droite->tab[2][2]);
-}
-
-// VERS LE BAS
-void tournerRubikubeVersBas(Face *rubikube[])
-{
-  // on recupere toutes les faces
-  Face *avant = getFace(DEVANT,rubikube);
-  Face *arriere = getFace(DERRIERE,rubikube);
-  Face *gauche = getFace(GAUCHE,rubikube);
-  Face *droite = getFace(DROITE,rubikube);
-  Face *haut = getFace(HAUT,rubikube);
-  Face *bas = getFace(BAS,rubikube);
-
-  switchFace(avant,haut);
-  switchFace(avant,arriere);
-  switchFace(avant,bas);
-
-  // rotation face gauche
   permuteCellule(&droite->tab[0][0], &droite->tab[0][2]);
   permuteCellule(&droite->tab[0][1], &droite->tab[1][2]);
   permuteCellule(&droite->tab[0][1], &droite->tab[1][0]);
@@ -631,6 +600,48 @@ void tournerRubikubeVersBas(Face *rubikube[])
   permuteCellule(&gauche->tab[0][1], &gauche->tab[2][1]);
   permuteCellule(&gauche->tab[0][1], &gauche->tab[1][2]);
   permuteCellule(&gauche->tab[0][2], &gauche->tab[2][2]);
+}
+
+// VERS LE BAS
+void tournerRubikubeVersBas(Face *rubikube[])
+{
+  // on recupere toutes les faces
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *arriere = getFace(DERRIERE,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  Face *haut = getFace(HAUT,rubikube);
+  Face *bas = getFace(BAS,rubikube);
+
+  switchFace(avant,bas);
+  switchFace(avant,arriere);
+  switchFace(avant,haut);
+
+  // rotation face gauche
+  permuteCellule(&gauche->tab[0][0], &gauche->tab[0][2]);
+  permuteCellule(&gauche->tab[0][1], &gauche->tab[1][2]);
+  permuteCellule(&gauche->tab[0][1], &gauche->tab[1][0]);
+  permuteCellule(&gauche->tab[0][0], &gauche->tab[2][2]);
+  permuteCellule(&gauche->tab[1][0], &gauche->tab[2][1]);
+  permuteCellule(&gauche->tab[0][0], &gauche->tab[2][0]);
+  // rotation face droite
+  permuteCellule(&droite->tab[0][0], &droite->tab[2][0]);
+  permuteCellule(&droite->tab[1][0], &droite->tab[0][1]);
+  permuteCellule(&droite->tab[0][0], &droite->tab[0][2]);
+  permuteCellule(&droite->tab[0][1], &droite->tab[2][1]);
+  permuteCellule(&droite->tab[0][1], &droite->tab[1][2]);
+  permuteCellule(&droite->tab[0][2], &droite->tab[2][2]);
+  // permutation face arriere
+  permuteCellule(&arriere->tab[0][0], &arriere->tab[2][2]);
+  permuteCellule(&arriere->tab[0][1], &arriere->tab[2][1]);
+  permuteCellule(&arriere->tab[0][2], &arriere->tab[2][0]);
+  permuteCellule(&arriere->tab[1][0], &arriere->tab[1][2]);
+  // permutation face haut
+  permuteCellule(&haut->tab[0][0], &haut->tab[2][2]);
+  permuteCellule(&haut->tab[0][1], &haut->tab[2][1]);
+  permuteCellule(&haut->tab[0][2], &haut->tab[2][0]);
+  permuteCellule(&haut->tab[1][0], &haut->tab[1][2]);
+  
 }
 
 
@@ -676,56 +687,321 @@ void milieuFace(Face *rubikube[])
   }
 }
 
+
+
+/* CROIX BLANCHE */
+
 void extremiteCroixBlanche(Face *rubikube[])
 {
   Face *avant = getFace(DEVANT,rubikube);
   Face *haut = getFace(HAUT,rubikube);
-  Face *arriere = getFace(DERRIERE,rubikube);
   Face *bas = getFace(BAS,rubikube);
-  // On place le blanc 7;
-  while (haut->tab[2][1].color != BLANC && haut->tab[2][1].val != 1)
+  while (haut->tab[2][1].color != BLANC)
   {
-    if (avant->tab[2][1].color == BLANC && avant->tab[2][1].val == 7)
+      if (avant->tab[0][1].color == BLANC)
+      {
+        FPrime(rubikube);
+        U(rubikube);
+        LPrime(rubikube);
+        UPrime(rubikube);
+      } else if (avant->tab[1][0].color == BLANC)
+      {
+        U(rubikube);
+        LPrime(rubikube);
+        UPrime(rubikube);
+      } else if (avant->tab[1][2].color == BLANC)
+      {
+        UPrime(rubikube);
+        R(rubikube);
+        U(rubikube);
+      } else if (avant->tab[2][1].color == BLANC)
+      {
+        F(rubikube);
+        U(rubikube);
+        LPrime(rubikube);
+        UPrime(rubikube);
+      } else if (bas->tab[0][1].color == BLANC)
+      {
+        F(rubikube);
+        F(rubikube);
+      }
+      tournerRubikubeVersDroite(rubikube);
+  }
+}
+
+int croixBlancheFaite(Face *rubikube[])
+{
+  Face *haut = getFace(HAUT,rubikube);
+  if (haut->tab[1][1].color == BLANC && haut->tab[1][0].color == BLANC && haut->tab[1][2].color == BLANC && haut->tab[0][1].color == BLANC && haut->tab[2][1].color == BLANC)
+  {
+    return 1;
+  }
+  return 0;
+
+}
+
+void switchExtremiteCroixBlanche(Face *rubikube[],int val)
+{
+  Face *haut = getFace(HAUT,rubikube);
+  if (haut->tab[2][1].val != val)
+  {
+    if (haut->tab[1][0].val == val)
     {
-      FPrime(rubikube);
-      UPrime(rubikube);
-      R(rubikube);
-      U(rubikube);
-    } else if (avant->tab[1][0].color == BLANC && avant->tab[1][0].val == 7)
-    {
+      L(rubikube);
       U(rubikube);
       LPrime(rubikube);
       UPrime(rubikube);
-    } else if (avant->tab[1][2].color == BLANC && avant->tab[1][2].val == 7)
+      E(rubikube);
+      UPrime(rubikube);
+      F(rubikube);
+      U(rubikube);
+    } else if (haut->tab[1][2].val == val)
     {
+      RPrime(rubikube);
       UPrime(rubikube);
       R(rubikube);
       U(rubikube);
-    } else if (bas->tab[0][1].color == BLANC && bas->tab[0][1].val == 7)
-    {
+      EPrime(rubikube);
+      U(rubikube);
+      FPrime(rubikube);
+      UPrime(rubikube);
+    } else {
+      BPrime(rubikube);
+      EPrime(rubikube);
+      UPrime(rubikube);
+      R(rubikube);
       U(rubikube);
       U(rubikube);
+      RPrime(rubikube);
+      UPrime(rubikube);
     }
-    B(rubikube);
-    R(rubikube);
-    L(rubikube);
   }
 }
 
-int isValideCroixBlanche(Face *rubikube[])
+void faireCroixBlanche(Face *rubikube[])
+{
+  milieuFace(rubikube);
+  while (croixBlancheFaite(rubikube) == 0)
+  {
+    extremiteCroixBlanche(rubikube);
+    UPrime(rubikube);
+  }
+  milieuFace(rubikube);
+}
+
+void mainCroixBlanche(Face *rubikube[])
+{
+  faireCroixBlanche(rubikube);
+    switchExtremiteCroixBlanche(rubikube,7);
+    tournerRubikubeVersDroite(rubikube);
+    switchExtremiteCroixBlanche(rubikube,5);
+    tournerRubikubeVersDroite(rubikube);
+    switchExtremiteCroixBlanche(rubikube,1);
+    tournerRubikubeVersDroite(rubikube);
+    switchExtremiteCroixBlanche(rubikube,3);
+    tournerRubikubeVersDroite(rubikube);
+    milieuFace(rubikube);
+}
+
+
+/* ANGLE FACE BLANCHE */
+
+int verifFaceBlanche(Face *rubikube[])
 {
   Face *haut = getFace(HAUT,rubikube);
-  Face *avant = getFace(DEVANT,rubikube);
-  Face *gauche = getFace(GAUCHE,rubikube);
-  Face *droite = getFace(DROITE,rubikube);
-  Face *arriere = getFace(DERRIERE,rubikube);
-  if (haut->tab[1][1].color == BLANC && haut->tab[1][0].color == BLANC && haut->tab[1][2].color == BLANC && haut->tab[0][1].color == BLANC && haut->tab[2][1].color == BLANC)
+  for (int i = 0;i < 3; i++)
   {
-    if ((avant->tab[0][1].color == ROUGE && avant->tab[1][1].color == ROUGE) && (gauche->tab[0][1].color == VERT && gauche->tab[1][1].color == VERT) && (droite->tab[0][1].color == BLEU && droite->tab[1][1].color == BLEU) && (arriere->tab[0][1].color == ORANGE && arriere->tab[1][1].color == ORANGE))
+    for (int j = 0; j < 3;j++)
     {
-      return 1;
+      if (haut->tab[i][j].color != BLANC)
+      {
+        return 0;
+      }
     }
   }
-  return 0;
+  return 1;
 }
 
+void decalerAngleVersGauche(Face *rubikube[])
+{
+  L(rubikube);
+  D(rubikube);
+  LPrime(rubikube);
+  RPrime(rubikube);
+  DPrime(rubikube);
+  R(rubikube);
+}
+
+void angleFaceBlanche(Face *rubikube[],int valeur)
+{
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  Face *haut = getFace(HAUT,rubikube);
+  Face *bas = getFace(BAS,rubikube);
+  int index = 0;
+  while (haut->tab[2][2].color != BLANC || haut->tab[2][2].val != valeur)
+  {
+    if (droite->tab[2][0].color == BLANC && droite->tab[2][0].val == valeur)
+    {
+      RPrime(rubikube);
+      DPrime(rubikube);
+      R(rubikube);
+    } else if (avant->tab[2][2].color == BLANC && avant->tab[2][2].val == valeur)
+    {
+      F(rubikube);
+      D(rubikube);
+      FPrime(rubikube);
+    } else if (bas->tab[0][2].color == BLANC && bas->tab[0][2].val == valeur)
+    {
+      F(rubikube);
+      L(rubikube);
+      D(rubikube);
+      D(rubikube);
+      LPrime(rubikube);
+      FPrime(rubikube);
+    } else if (droite->tab[0][0].color == BLANC && droite->tab[0][0].val == valeur)
+    {
+      LPrime(rubikube);
+      MPrime(rubikube);
+      FPrime(rubikube);
+      L(rubikube);
+      M(rubikube);
+      D(rubikube);
+      LPrime(rubikube);
+      MPrime(rubikube);
+      FPrime(rubikube);
+      L(rubikube);
+      M(rubikube);
+    } else if (avant->tab[0][2].color == BLANC && avant->tab[0][2].val == valeur)
+    {
+      B(rubikube);
+      SPrime(rubikube);
+      R(rubikube);
+      BPrime(rubikube);
+      S(rubikube);
+      DPrime(rubikube);
+      F(rubikube);
+      D(rubikube);
+      FPrime(rubikube);
+    }
+    D(rubikube);
+    index++;
+    if (index == 4)
+    {
+      break;
+    }
+  }
+}
+
+void mainAngleFaceBlanche(Face *rubikube[])
+{
+  while (verifFaceBlanche(rubikube) != 1)
+    {
+        angleFaceBlanche(rubikube,8);
+        tournerRubikubeVersDroite(rubikube);
+        angleFaceBlanche(rubikube,2);
+        tournerRubikubeVersDroite(rubikube);
+        angleFaceBlanche(rubikube,0);
+        tournerRubikubeVersDroite(rubikube);
+        angleFaceBlanche(rubikube,6);
+        tournerRubikubeVersDroite(rubikube);
+    }
+}
+
+/* DEUXIEME COUCHE */
+
+int verifDeuxiemeCouche(Face *rubikube[])
+{
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *derriere = getFace(DERRIERE,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  if (avant->tab[1][0].color != ROUGE && avant->tab[1][2].color != ROUGE)
+  {
+    return 0;
+  }
+  if (gauche->tab[1][0].color != BLEU && gauche->tab[1][2].color != BLEU)
+  {
+    return 0;
+  }
+  if (derriere->tab[1][0].color != ORANGE && derriere->tab[1][2].color != ORANGE)
+  {
+    return 0;
+  }
+  if (droite->tab[1][0].color != VERT && droite->tab[1][2].color != VERT)
+  {
+    return 0;
+  }
+  return 1;
+}
+
+
+void deuxiemeCoucheDroite(Face *rubikube[])
+{
+  U(rubikube);
+  R(rubikube);
+  UPrime(rubikube);
+  RPrime(rubikube);
+  UPrime(rubikube);
+  FPrime(rubikube);
+  U(rubikube);
+  F(rubikube);
+}
+
+void deuxiemeCoucheGauche(Face *rubikube[])
+{
+  UPrime(rubikube);
+  LPrime(rubikube);
+  U(rubikube);
+  L(rubikube);
+  U(rubikube);
+  F(rubikube);
+  UPrime(rubikube);
+  FPrime(rubikube);
+}
+
+void deuxiemeCouche(Face *rubikube[],enum Color color)
+{
+  Face *avant = getFace(DEVANT,rubikube);
+  int index = 0;
+  while (avant->tab[1][0].color != color && avant->tab[1][2].color != color && index < 4)
+  {
+    if (avant->tab[0][1].color == color)
+    {
+      if (avant->tab[0][1].val == 3)
+      {
+        printf("droite\n");
+        deuxiemeCoucheDroite(rubikube);
+      } else if (avant->tab[0][1].val == 5)
+      {
+        printf("gauche\n");
+        deuxiemeCoucheGauche(rubikube);
+      }
+    }
+    U(rubikube);
+    index++;
+  }
+}
+
+void mainDeuxiemeCouche(Face *rubikube[])
+{
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersGauche(rubikube);
+  tournerRubikubeVersGauche(rubikube);
+  // while (verifDeuxiemeCouche(rubikube) == 0)
+  // {
+  //   deuxiemeCouche(rubikube,ROUGE);
+  //   tournerRubikubeVersDroite(rubikube);
+  //   deuxiemeCouche(rubikube,VERT);
+  //   tournerRubikubeVersDroite(rubikube);
+  //   deuxiemeCouche(rubikube,ORANGE);
+  //   tournerRubikubeVersDroite(rubikube);
+  //   deuxiemeCouche(rubikube,BLEU);
+  //   tournerRubikubeVersDroite(rubikube);
+  // }
+  
+  
+
+
+}

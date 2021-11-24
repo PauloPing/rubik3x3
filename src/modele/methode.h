@@ -3,8 +3,8 @@
 
 void UPrime(Face **);
 void U(Face **);
-void ré(Face **);
-void réPrime(Face **);
+void D(Face **);
+void DPrime(Face **);
 void LPrime(Face **);
 void L(Face **);
 void R(Face **);
@@ -21,6 +21,9 @@ void S(Face **);
 void SPrime(Face **);
 void switchFace(Face *,Face *);
 void milieuFace(Face **);
+void angleFaceBlanche(Face **,int);
+void decalerAngleVersGauche(Face **);
+int verifFaceBlanche(Face **);
 
 void *mouvement[NB_FUNCTION] = {
     U,
@@ -33,8 +36,8 @@ void *mouvement[NB_FUNCTION] = {
     RPrime,
     B,
     BPrime,
-    ré,
-    réPrime,
+    D,
+    DPrime,
     M,
     MPrime,
     E,

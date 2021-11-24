@@ -163,23 +163,33 @@ void melangerRubikCube(Face *rubikube[])
     }
 }
 
-void croixBlanche(Face *rubikube[])
-{ 
-  while (isValideCroixBlanche(rubikube) == 0)
-  {
-    // melangerRubikCube(rubikube);
-    extremiteCroixBlanche(rubikube);
-    tournerRubikubeVersDroite(rubikube);
-  }
-}
+
 
 int main(int argc, char *argv[])
 {
     Face *rubikube[NB_FACE];
     creerRubikube(rubikube);
     melangerRubikCube(rubikube);
-    milieuFace(rubikube);
-    extremiteCroixBlanche(rubikube);
+    mainCroixBlanche(rubikube);
+    mainAngleFaceBlanche(rubikube);
+
+    mainDeuxiemeCouche(rubikube);
+    for (int i = 0; i < 100000; i++)
+    {
+       deuxiemeCouche(rubikube,ROUGE);
+    tournerRubikubeVersDroite(rubikube);
+    deuxiemeCouche(rubikube,VERT);
+    tournerRubikubeVersDroite(rubikube);
+    deuxiemeCouche(rubikube,ORANGE);
+    tournerRubikubeVersDroite(rubikube);
+    deuxiemeCouche(rubikube,BLEU);
+    tournerRubikubeVersDroite(rubikube); 
+    }
+    
+    
+
+
     printTerminalRubikCube(rubikube);
+    
     return 0;
 }
