@@ -172,24 +172,42 @@ int main(int argc, char *argv[])
     melangerRubikCube(rubikube);
     mainCroixBlanche(rubikube);
     mainAngleFaceBlanche(rubikube);
-
     mainDeuxiemeCouche(rubikube);
-    for (int i = 0; i < 100000; i++)
-    {
-       deuxiemeCouche(rubikube,ROUGE);
-    tournerRubikubeVersDroite(rubikube);
-    deuxiemeCouche(rubikube,VERT);
-    tournerRubikubeVersDroite(rubikube);
-    deuxiemeCouche(rubikube,ORANGE);
-    tournerRubikubeVersDroite(rubikube);
-    deuxiemeCouche(rubikube,BLEU);
-    tournerRubikubeVersDroite(rubikube); 
-    }
+
+
+    // tournerRubikubeVersBas(rubikube);
+    // tournerRubikubeVersBas(rubikube);
+    // printTerminalRubikCube(rubikube);
+    // while (verifCroixJaune(rubikube) == 0)
+    // {
+    //     faireCroixJaune(rubikube);
+    //     tournerRubikubeVersDroite(rubikube);
+    // }
+    // Face *avant = getFace(DEVANT,rubikube);
+    // while (avant->tab[1][1].color != ROUGE)
+    // {
+    //     tournerRubikubeVersDroite(rubikube);
+    // }
     
+    tournerRubikubeVersBas(rubikube);
+    tournerRubikubeVersBas(rubikube);
+    tournerRubikubeVersBas(rubikube);
+    tournerRubikubeVersBas(rubikube);
     
+
+    
+
 
 
     printTerminalRubikCube(rubikube);
+    
+
+
+    
+    
+    
+
+
     
     return 0;
 }

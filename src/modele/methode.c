@@ -910,31 +910,84 @@ void mainAngleFaceBlanche(Face *rubikube[])
 
 /* DEUXIEME COUCHE */
 
-int verifDeuxiemeCouche(Face *rubikube[])
+
+int verifCoucheRouge(Face *rubikube[])
+{
+  Face *avant = getFace(DEVANT,rubikube);
+  if (avant->tab[1][0].color == ROUGE && avant->tab[1][0].val == 5 && avant->tab[1][2].color == ROUGE && avant->tab[1][2].val == 3 )
+  {
+    printf("valeur 5 et 3 ok\n");
+    return 1;
+  }
+  printf("pas ok rouge\n");
+  return 0;
+}
+
+int verifCoucheBleu(Face *rubikube[])
+{
+  Face *gauche = getFace(GAUCHE,rubikube);
+  if (gauche->tab[1][0].color == BLEU && gauche->tab[1][0].val == 5 && gauche->tab[1][2].color == BLEU && gauche->tab[1][2].val == 3 )
+  {
+    printf("valeur 5 et 3 ok\n");
+    return 1;
+  }
+  printf("pas ok bleu\n");
+  return 0;
+}
+
+int verifCoucheOrange(Face *rubikube[])
+{
+  Face *derriere = getFace(DERRIERE,rubikube);
+  if (derriere->tab[1][0].color == ORANGE && derriere->tab[1][0].val == 5 && derriere->tab[1][2].color == ORANGE && derriere->tab[1][2].val == 3 )
+  {
+    printf("valeur 5 et 3 ok\n");
+    return 1;
+  }
+  printf("pas ok orange\n");
+  return 0;
+}
+
+int verifCoucheVerte(Face *rubikube[])
+{
+  Face *droite = getFace(DROITE,rubikube);
+  if (droite->tab[1][0].color == VERT && droite->tab[1][0].val == 5 && droite->tab[1][2].color == VERT && droite->tab[1][2].val == 3 )
+  {
+    printf("valeur 5 et 3 ok\n");
+    return 1;
+  }
+  printf("pas ok vert\n");
+  return 0;
+}
+
+int verifDeuxiemeCouche(Face *rubikube[]) 
 {
   Face *avant = getFace(DEVANT,rubikube);
   Face *gauche = getFace(GAUCHE,rubikube);
   Face *derriere = getFace(DERRIERE,rubikube);
   Face *droite = getFace(DROITE,rubikube);
-  if (avant->tab[1][0].color != ROUGE && avant->tab[1][2].color != ROUGE)
+  if (avant->tab[1][0].color == ROUGE && avant->tab[1][2].color == ROUGE)
   {
+  } else {
     return 0;
   }
-  if (gauche->tab[1][0].color != BLEU && gauche->tab[1][2].color != BLEU)
+  if (gauche->tab[1][0].color == BLEU && gauche->tab[1][2].color == BLEU)
   {
+  } else {
     return 0;
   }
-  if (derriere->tab[1][0].color != ORANGE && derriere->tab[1][2].color != ORANGE)
+  if (derriere->tab[1][0].color == ORANGE && derriere->tab[1][2].color == ORANGE)
   {
+  } else {
     return 0;
   }
-  if (droite->tab[1][0].color != VERT && droite->tab[1][2].color != VERT)
+  if (droite->tab[1][0].color == VERT && droite->tab[1][2].color == VERT)
   {
+  } else {
     return 0;
   }
+
   return 1;
 }
-
 
 void deuxiemeCoucheDroite(Face *rubikube[])
 {
@@ -963,24 +1016,32 @@ void deuxiemeCoucheGauche(Face *rubikube[])
 void deuxiemeCouche(Face *rubikube[],enum Color color)
 {
   Face *avant = getFace(DEVANT,rubikube);
-  int index = 0;
-  while (avant->tab[1][0].color != color && avant->tab[1][2].color != color && index < 4)
+  Face *droite = getFace(DROITE,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  int i;
+  for (i = 0;i < 4;i++)
   {
     if (avant->tab[0][1].color == color)
     {
       if (avant->tab[0][1].val == 3)
       {
-        printf("droite\n");
         deuxiemeCoucheDroite(rubikube);
       } else if (avant->tab[0][1].val == 5)
       {
-        printf("gauche\n");
+        deuxiemeCoucheGauche(rubikube);
+      } else if (droite->tab[1][0].color == color && droite->tab[1][0].val == 3)
+      {
+        deuxiemeCoucheDroite(rubikube);
+        deuxiemeCoucheDroite(rubikube);
+      } else if (gauche->tab[1][2].color == color && gauche->tab[1][2].val == 5)
+      {
+        deuxiemeCoucheGauche(rubikube);
         deuxiemeCoucheGauche(rubikube);
       }
     }
     U(rubikube);
-    index++;
   }
+  
 }
 
 void mainDeuxiemeCouche(Face *rubikube[])
@@ -989,19 +1050,80 @@ void mainDeuxiemeCouche(Face *rubikube[])
   tournerRubikubeVersBas(rubikube);
   tournerRubikubeVersGauche(rubikube);
   tournerRubikubeVersGauche(rubikube);
-  // while (verifDeuxiemeCouche(rubikube) == 0)
-  // {
-  //   deuxiemeCouche(rubikube,ROUGE);
-  //   tournerRubikubeVersDroite(rubikube);
-  //   deuxiemeCouche(rubikube,VERT);
-  //   tournerRubikubeVersDroite(rubikube);
-  //   deuxiemeCouche(rubikube,ORANGE);
-  //   tournerRubikubeVersDroite(rubikube);
-  //   deuxiemeCouche(rubikube,BLEU);
-  //   tournerRubikubeVersDroite(rubikube);
-  // }
-  
-  
-
-
+  while (verifDeuxiemeCouche(rubikube) != 1)
+    {
+        deuxiemeCouche(rubikube,ROUGE);
+        EPrime(rubikube);
+        DPrime(rubikube);
+        deuxiemeCouche(rubikube,VERT);
+        EPrime(rubikube);
+        DPrime(rubikube);
+        deuxiemeCouche(rubikube,ORANGE);
+        EPrime(rubikube);
+        DPrime(rubikube);
+        deuxiemeCouche(rubikube,BLEU);
+        EPrime(rubikube);
+        DPrime(rubikube);
+    }
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersGauche(rubikube);
+  tournerRubikubeVersGauche(rubikube);
 }
+
+
+/* CROIX JAUNE */
+
+int verifCroixJaune(Face *rubikube[])
+{
+  Face *bas = getFace(HAUT,rubikube);
+  if (bas->tab[1][1].color == JAUNE && bas->tab[0][1].color == JAUNE && bas->tab[1][0].color == JAUNE && bas->tab[1][2].color == JAUNE && bas->tab[2][1].color == JAUNE )
+  {
+    return 1;
+  }
+  return 0;
+}
+
+void algoCroixJaune(Face *rubkibube[])
+{
+  F(rubkibube);
+  R(rubkibube);
+  U(rubkibube);
+  RPrime(rubkibube);
+  UPrime(rubkibube);
+  FPrime(rubkibube);
+}
+
+void faireCroixJaune(Face *rubikube[])
+{
+  Face *haut = getFace(HAUT,rubikube);
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *derriere = getFace(DERRIERE,rubikube);
+  int index = 0;
+  if (avant->tab[0][1].color == JAUNE && droite->tab[0][1].color == JAUNE && gauche->tab[0][1].color == JAUNE && derriere->tab[0][1].color == JAUNE)
+  {
+    algoCroixJaune(rubikube);
+    U(rubikube);
+    EPrime(rubikube);
+    DPrime(rubikube);
+    algoCroixJaune(rubikube);
+    U(rubikube);
+    EPrime(rubikube);
+    DPrime(rubikube);
+    algoCroixJaune(rubikube);
+  }
+  if (avant->tab[0][1].color == JAUNE && droite->tab[0][1].color == JAUNE && haut->tab[0][1].color == JAUNE && haut->tab[1][0].color == JAUNE)
+  {
+    F(rubikube);
+    U(rubikube);
+    R(rubikube);
+    UPrime(rubikube);
+    RPrime(rubikube);
+    FPrime(rubikube);
+  }
+}
+
+
+  
