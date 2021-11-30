@@ -151,17 +151,7 @@ void printTerminalRubikCube(Face *rubikube[])
     printf("\x1b[0m");
 }
 
-void melangerRubikCube(Face *rubikube[])
-{
-    srand(time(NULL));
-    int r, i = 0;
-    for (i = 0; i < NB_MOUVEMENT; i++)
-    {
-        r = rand() % (NB_FUNCTION);
-        void (*fun_ptr)(Face * rubikube[]) = mouvement[r];
-        (*fun_ptr)(rubikube);
-    }
-}
+
 
 
 
@@ -173,31 +163,11 @@ int main(int argc, char *argv[])
     mainCroixBlanche(rubikube);
     mainAngleFaceBlanche(rubikube);
     mainDeuxiemeCouche(rubikube);
+    mainCroixJaune(rubikube);
 
-
-    // tournerRubikubeVersBas(rubikube);
-    // tournerRubikubeVersBas(rubikube);
-    // printTerminalRubikCube(rubikube);
-    // while (verifCroixJaune(rubikube) == 0)
-    // {
-    //     faireCroixJaune(rubikube);
-    //     tournerRubikubeVersDroite(rubikube);
-    // }
-    // Face *avant = getFace(DEVANT,rubikube);
-    // while (avant->tab[1][1].color != ROUGE)
-    // {
-    //     tournerRubikubeVersDroite(rubikube);
-    // }
-    
-    tournerRubikubeVersBas(rubikube);
-    tournerRubikubeVersBas(rubikube);
-    tournerRubikubeVersBas(rubikube);
-    tournerRubikubeVersBas(rubikube);
-    
+    mainExtremiteCroixJaune(rubikube);
 
     
-
-
 
     printTerminalRubikCube(rubikube);
     

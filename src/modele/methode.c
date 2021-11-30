@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "struct.h"
 #include "methode.h"
+#include <time.h>
+#include <stdlib.h>
 
 
 void permuteCellule(Cellule *c1, Cellule *c2)
@@ -644,6 +646,20 @@ void tournerRubikubeVersBas(Face *rubikube[])
   
 }
 
+/* MELANGER */
+
+void melangerRubikCube(Face *rubikube[])
+{
+    srand(time(NULL));
+    int r, i = 0;
+    for (i = 0; i < 1000; i++)
+    {
+        r = rand() % (NB_FUNCTION);
+        void (*fun_ptr)(Face * rubikube[]) = mouvement[r];
+        (*fun_ptr)(rubikube);
+    }
+}
+
 
 /* FAIRE LA CROIX BLANCHE */
 
@@ -686,8 +702,6 @@ void milieuFace(Face *rubikube[])
     E(rubikube);
   }
 }
-
-
 
 /* CROIX BLANCHE */
 
@@ -895,7 +909,8 @@ void angleFaceBlanche(Face *rubikube[],int valeur)
 
 void mainAngleFaceBlanche(Face *rubikube[])
 {
-  while (verifFaceBlanche(rubikube) != 1)
+  int i = 0;
+  while (verifFaceBlanche(rubikube) != 1 && i < 1000)
     {
         angleFaceBlanche(rubikube,8);
         tournerRubikubeVersDroite(rubikube);
@@ -905,6 +920,13 @@ void mainAngleFaceBlanche(Face *rubikube[])
         tournerRubikubeVersDroite(rubikube);
         angleFaceBlanche(rubikube,6);
         tournerRubikubeVersDroite(rubikube);
+        i++;
+    }
+    if (i == 1000)
+    {
+      melangerRubikCube(rubikube);
+      faireCroixBlanche(rubikube);
+      mainAngleFaceBlanche(rubikube);
     }
 }
 
@@ -1046,11 +1068,14 @@ void deuxiemeCouche(Face *rubikube[],enum Color color)
 
 void mainDeuxiemeCouche(Face *rubikube[])
 {
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
   tournerRubikubeVersBas(rubikube);
   tournerRubikubeVersBas(rubikube);
   tournerRubikubeVersGauche(rubikube);
   tournerRubikubeVersGauche(rubikube);
-  while (verifDeuxiemeCouche(rubikube) != 1)
+  int i = 0;
+  while (verifDeuxiemeCouche(rubikube) != 1 && i < 100)
     {
         deuxiemeCouche(rubikube,ROUGE);
         EPrime(rubikube);
@@ -1064,11 +1089,19 @@ void mainDeuxiemeCouche(Face *rubikube[])
         deuxiemeCouche(rubikube,BLEU);
         EPrime(rubikube);
         DPrime(rubikube);
+        i++;
     }
   tournerRubikubeVersBas(rubikube);
   tournerRubikubeVersBas(rubikube);
   tournerRubikubeVersGauche(rubikube);
   tournerRubikubeVersGauche(rubikube);
+  if (i == 100 || avant->tab[0][1].color != ROUGE || avant->tab[0][0].color != ROUGE || droite->tab[0][1].color != BLEU)
+  {
+    melangerRubikCube(rubikube);
+    mainCroixBlanche(rubikube);
+    mainAngleFaceBlanche(rubikube);
+    mainDeuxiemeCouche(rubikube);
+  } 
 }
 
 
@@ -1076,22 +1109,22 @@ void mainDeuxiemeCouche(Face *rubikube[])
 
 int verifCroixJaune(Face *rubikube[])
 {
-  Face *bas = getFace(HAUT,rubikube);
-  if (bas->tab[1][1].color == JAUNE && bas->tab[0][1].color == JAUNE && bas->tab[1][0].color == JAUNE && bas->tab[1][2].color == JAUNE && bas->tab[2][1].color == JAUNE )
+  Face *haut = getFace(HAUT,rubikube);
+  if (haut->tab[0][1].color == JAUNE && haut->tab[1][0].color == JAUNE && haut->tab[1][1].color == JAUNE && haut->tab[1][1].color == JAUNE && haut->tab[2][1].color == JAUNE)
   {
     return 1;
   }
   return 0;
 }
 
-void algoCroixJaune(Face *rubkibube[])
+void algoCroixJaune(Face *rubikube[])
 {
-  F(rubkibube);
-  R(rubkibube);
-  U(rubkibube);
-  RPrime(rubkibube);
-  UPrime(rubkibube);
-  FPrime(rubkibube);
+  F(rubikube);
+  R(rubikube);
+  U(rubikube);
+  RPrime(rubikube);
+  UPrime(rubikube);
+  FPrime(rubikube);
 }
 
 void faireCroixJaune(Face *rubikube[])
@@ -1101,20 +1134,16 @@ void faireCroixJaune(Face *rubikube[])
   Face *droite = getFace(DROITE,rubikube);
   Face *gauche = getFace(GAUCHE,rubikube);
   Face *derriere = getFace(DERRIERE,rubikube);
-  int index = 0;
   if (avant->tab[0][1].color == JAUNE && droite->tab[0][1].color == JAUNE && gauche->tab[0][1].color == JAUNE && derriere->tab[0][1].color == JAUNE)
   {
     algoCroixJaune(rubikube);
-    U(rubikube);
-    EPrime(rubikube);
-    DPrime(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
     algoCroixJaune(rubikube);
-    U(rubikube);
-    EPrime(rubikube);
-    DPrime(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
     algoCroixJaune(rubikube);
-  }
-  if (avant->tab[0][1].color == JAUNE && droite->tab[0][1].color == JAUNE && haut->tab[0][1].color == JAUNE && haut->tab[1][0].color == JAUNE)
+  } else if (avant->tab[0][1].color == JAUNE && droite->tab[0][1].color == JAUNE && haut->tab[0][1].color == JAUNE && haut->tab[1][0].color == JAUNE)
   {
     F(rubikube);
     U(rubikube);
@@ -1124,6 +1153,140 @@ void faireCroixJaune(Face *rubikube[])
     FPrime(rubikube);
   }
 }
+
+void mainCroixJaune(Face *rubikube[])
+{
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersGauche(rubikube);
+  tournerRubikubeVersGauche(rubikube);
+  int i = 0;
+  while (verifCroixJaune(rubikube) == 0 && i < 100)
+  {
+    for (int i = 0; i < 4;i++)
+    {
+      for (int j = 0; j < 4;j++)
+      {
+        faireCroixJaune(rubikube);
+        U(rubikube);
+      }
+      tournerRubikubeVersDroite(rubikube);
+    }
+    i++; 
+  }
+  if (i == 100)
+  {
+    melangerRubikCube(rubikube);
+    mainCroixBlanche(rubikube);
+    mainAngleFaceBlanche(rubikube);
+    mainDeuxiemeCouche(rubikube);
+    mainCroixJaune(rubikube);
+  }
+}
+
+
+/* SWITCH EXTREMITE CROIX JAUNE */
+
+int verifExtremiteCroixJaune(Face *rubikube[])
+{
+  Face *haut = getFace(HAUT,rubikube);
+  if (haut->tab[0][1].val == 7 && haut->tab[1][0].val == 5 && haut->tab[1][2].val == 3 && haut->tab[2][1].val == 1)
+  {
+    return 1;
+  }
+  return 0;
+}
+
+void faireExtremiteCroixJaune(Face *rubikube[],enum Color color)
+{
+  Face *droite = getFace(DROITE,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *derriere = getFace(DERRIERE,rubikube);
+  if (gauche->tab[0][1].color == color)
+  {
+    R(rubikube);
+    U(rubikube);
+    RPrime(rubikube);
+    U(rubikube);
+    R(rubikube);
+    U(rubikube);
+    U(rubikube);
+    RPrime(rubikube);
+    U(rubikube);
+  } else if (derriere->tab[0][1].color == color)
+  {
+    U(rubikube);
+
+    R(rubikube);
+    U(rubikube);
+    RPrime(rubikube);
+    U(rubikube);
+    R(rubikube);
+    U(rubikube);
+    U(rubikube);
+    RPrime(rubikube);
+    U(rubikube);
+
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    R(rubikube);
+    U(rubikube);
+    RPrime(rubikube);
+    U(rubikube);
+    R(rubikube);
+    U(rubikube);
+    U(rubikube);
+    RPrime(rubikube);
+    U(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+  }
+}
+
+void mainExtremiteCroixJaune(Face *rubikube[])
+{
+  int i = 0;
+  while (verifExtremiteCroixJaune(rubikube) == 0 && i < 100)
+  {
+    faireExtremiteCroixJaune(rubikube,ROUGE);
+    tournerRubikubeVersDroite(rubikube);
+    faireExtremiteCroixJaune(rubikube,VERT);
+    tournerRubikubeVersDroite(rubikube);
+    faireExtremiteCroixJaune(rubikube,ORANGE);
+    tournerRubikubeVersDroite(rubikube);
+    faireExtremiteCroixJaune(rubikube,BLEU);
+    tournerRubikubeVersDroite(rubikube);
+    i++;
+  }
+  if (i == 100)
+  {
+    melangerRubikCube(rubikube);
+    mainCroixBlanche(rubikube);
+    mainAngleFaceBlanche(rubikube);
+    mainDeuxiemeCouche(rubikube);
+    mainCroixJaune(rubikube);
+    mainExtremiteCroixJaune(rubikube);
+
+  }
+}
+
+/* FAIRE ANGLES JAUNE */
+
+int verifAngleJaune(Face *rubikube[])
+{
+  Face *haut = getFace(HAUT,rubikube);
+  if (haut->tab[0][0].val == 8 && haut->tab[0][2].val == 6 && haut->tab[2][0].val == 2 && haut->tab[2][2].val == 0)
+  {
+    return 1;
+  }
+  return 0;
+}
+
+void faireAngleJaune(Face *rubikube[])
+{
+  
+}
+ 
 
 
   
