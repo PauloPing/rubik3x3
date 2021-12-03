@@ -60,6 +60,34 @@ char *color(Cellule c)
     }
 }
 
+char *letter(Cellule c)
+{
+    enum Color color = c.color;
+    switch (color)
+    {
+    case ROUGE:
+        return "R";
+        break;
+    case BLEU:
+        return "B";
+        break;
+    case JAUNE:
+        return "J";
+        break;
+    case ORANGE:
+        return "O";
+        break;
+    case BLANC:
+        return "b";
+        break;
+    case VERT:
+        return "V";
+        break;
+    }
+}
+
+
+
 Face *creerFace(enum Direction dir, enum Color color)
 {
     int val = 0;
@@ -100,22 +128,22 @@ void printTerminalFaceFile(FILE *file,Face *face)
     int nbEspace = 12;
     for (int j = 0; j < nbEspace; j++)
         fprintf(file," ");
-    fprintf(file,"\x1b[30m - - - - -\n");
+    fprintf(file,"  - - - - -\n");
     int i, j;
     for (i = 0; i < TAILLE_MATRICE; i++)
     {
         for (int j = 0; j < nbEspace; j++)
             fprintf(file," ");
-        fprintf(file,"|");
+        fprintf(file," |");
         for (j = 0; j < TAILLE_MATRICE; j++)
         {
-            fprintf(file,"%d \x1b[0m", color(face->tab[i][j]), face->tab[i][j].val); //  + face->tab[i]->y * TAILLE_MATRICE
+            fprintf(file," %d%s ",  face->tab[i][j].val,letter(face->tab[i][j])); //  + face->tab[i]->y * TAILLE_MATRICE
         }
-        fprintf(file,"\x1b[30m|\n");
+        fprintf(file,"|\n");
     }
     for (int j = 0; j < nbEspace; j++)
         fprintf(file," ");
-    fprintf(file," - - - - -\n");
+    fprintf(file,"  - - - - -\n");
 }
 
 void printTerminalRubikCubeFile(FILE *file,Face *rubikube[])
@@ -125,30 +153,30 @@ void printTerminalRubikCubeFile(FILE *file,Face *rubikube[])
     printTerminalFaceFile(file,rubikube[HAUT]);
     for (i = 0; i < nbFaceMilieu; i++)
     {
-        fprintf(file,"\x1b[30m - - - - -  ");
+        fprintf(file," - - - - -  ");
     }
     fprintf(file,"\n");
     for (i = 0; i < TAILLE_MATRICE; i++)
     {
         for (j = 1; j < nbFaceMilieu + 1; j++)
         {
-            fprintf(file,"\x1b[30m|");
+            fprintf(file,"|");
 
             for (k = 0; k < TAILLE_MATRICE; k++)
             {
-                fprintf(file,"%s %d ", color(rubikube[j]->tab[i][k]), rubikube[j]->tab[i][k].val); //  + face->tab[i]->y * TAILLE_MATRICE
+                fprintf(file," %d%s ",  rubikube[j]->tab[i][k].val,letter(rubikube[j]->tab[i][k])); //  + face->tab[i]->y * TAILLE_MATRICE
             }
-            fprintf(file,"\x1b[30m| ");
+            fprintf(file,"| ");
         }
         fprintf(file,"\n");
     }
     for (i = 0; i < nbFaceMilieu; i++)
     {
-        fprintf(file,"\x1b[30m - - - - -");
+        fprintf(file," - - - - -  ");
     }
     fprintf(file,"\n");
     printTerminalFaceFile(file,rubikube[BAS]);
-    fprintf(file,"\x1b[0m");
+    fprintf(file," ");
 }
 
 
