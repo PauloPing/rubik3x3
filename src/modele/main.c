@@ -95,6 +95,64 @@ void creerRubikube(Face *rubikube[])
     }
 }
 
+void printTerminalFaceFile(FILE *file,Face *face)
+{
+    int nbEspace = 12;
+    for (int j = 0; j < nbEspace; j++)
+        fprintf(file," ");
+    fprintf(file,"\x1b[30m - - - - -\n");
+    int i, j;
+    for (i = 0; i < TAILLE_MATRICE; i++)
+    {
+        for (int j = 0; j < nbEspace; j++)
+            fprintf(file," ");
+        fprintf(file,"|");
+        for (j = 0; j < TAILLE_MATRICE; j++)
+        {
+            fprintf(file,"%d \x1b[0m", color(face->tab[i][j]), face->tab[i][j].val); //  + face->tab[i]->y * TAILLE_MATRICE
+        }
+        fprintf(file,"\x1b[30m|\n");
+    }
+    for (int j = 0; j < nbEspace; j++)
+        fprintf(file," ");
+    fprintf(file," - - - - -\n");
+}
+
+void printTerminalRubikCubeFile(FILE *file,Face *rubikube[])
+{
+    int nbFaceMilieu = NB_FACE - 2;
+    int i, j, k;
+    printTerminalFaceFile(file,rubikube[HAUT]);
+    for (i = 0; i < nbFaceMilieu; i++)
+    {
+        fprintf(file,"\x1b[30m - - - - -  ");
+    }
+    fprintf(file,"\n");
+    for (i = 0; i < TAILLE_MATRICE; i++)
+    {
+        for (j = 1; j < nbFaceMilieu + 1; j++)
+        {
+            fprintf(file,"\x1b[30m|");
+
+            for (k = 0; k < TAILLE_MATRICE; k++)
+            {
+                fprintf(file,"%s %d ", color(rubikube[j]->tab[i][k]), rubikube[j]->tab[i][k].val); //  + face->tab[i]->y * TAILLE_MATRICE
+            }
+            fprintf(file,"\x1b[30m| ");
+        }
+        fprintf(file,"\n");
+    }
+    for (i = 0; i < nbFaceMilieu; i++)
+    {
+        fprintf(file,"\x1b[30m - - - - -");
+    }
+    fprintf(file,"\n");
+    printTerminalFaceFile(file,rubikube[BAS]);
+    fprintf(file,"\x1b[0m");
+}
+
+
+/*--------------------------------Affichage Terminal --------------------------*/
 void printTerminalFace(Face *face)
 {
     int nbEspace = 12;
@@ -154,22 +212,52 @@ void printTerminalRubikCube(Face *rubikube[])
 
 
 
-
 int main(int argc, char *argv[])
 {
+    FILE *file = fopen("affichage","w");
     Face *rubikube[NB_FACE];
     creerRubikube(rubikube);
-    melangerRubikCube(rubikube);
-    mainCroixBlanche(rubikube);
-    mainAngleFaceBlanche(rubikube);
-    mainDeuxiemeCouche(rubikube);
-    mainCroixJaune(rubikube);
-
-    mainExtremiteCroixJaune(rubikube);
-
-    
-
+    fprintf(file,"RUBIKUBE DE DEPART : \n");
+    printf("RUBIKUBE DE DEPART : \n");
     printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    melangerRubikCube(rubikube);
+    fprintf(file,"RUBIKUBE MELANGE : \n");
+    printf("RUBIKUBE MELANGE : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    mainCroixBlanche(rubikube);
+    fprintf(file,"RUBIKUBE CROIX BLANCHE : \n");
+    printf("RUBIKUBE CROIX BLANCHE : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    mainAngleFaceBlanche(rubikube);
+    fprintf(file,"RUBIKUBE FACE BLANCHE : \n");
+    printf("RUBIKUBE FACE BLANCHE : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    mainDeuxiemeCouche(rubikube);
+    fprintf(file,"RUBIKUBE DEUXIEME COUCHE : \n");
+    printf("RUBIKUBE DEUXIEME COUCHE : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    mainCroixJaune(rubikube);
+    mainExtremiteCroixJaune(rubikube);
+    fprintf(file,"RUBIKUBE CROIX JAUNE : \n");
+    printf("RUBIKUBE CROIX JAUNE : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    mainAngleJaune(rubikube);
+    fprintf(file,"RUBIKUBE COIN JAUNE : \n");
+    printf("RUBIKUBE COIN JAUNE : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    mainFaceJaune(rubikube);
+    fprintf(file,"RUBIKUBE FINAL : \n");
+    printf("RUBIKUBE FINAL : \n");
+    printTerminalRubikCube(rubikube);
+    printTerminalRubikCubeFile(file,rubikube);
+    
     
 
 

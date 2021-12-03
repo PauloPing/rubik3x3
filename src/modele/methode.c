@@ -910,7 +910,7 @@ void angleFaceBlanche(Face *rubikube[],int valeur)
 void mainAngleFaceBlanche(Face *rubikube[])
 {
   int i = 0;
-  while (verifFaceBlanche(rubikube) != 1 && i < 1000)
+  while (verifFaceBlanche(rubikube) != 1 && i < 10)
     {
         angleFaceBlanche(rubikube,8);
         tournerRubikubeVersDroite(rubikube);
@@ -922,7 +922,7 @@ void mainAngleFaceBlanche(Face *rubikube[])
         tournerRubikubeVersDroite(rubikube);
         i++;
     }
-    if (i == 1000)
+    if (i == 10)
     {
       melangerRubikCube(rubikube);
       faireCroixBlanche(rubikube);
@@ -1075,7 +1075,7 @@ void mainDeuxiemeCouche(Face *rubikube[])
   tournerRubikubeVersGauche(rubikube);
   tournerRubikubeVersGauche(rubikube);
   int i = 0;
-  while (verifDeuxiemeCouche(rubikube) != 1 && i < 100)
+  while (verifDeuxiemeCouche(rubikube) != 1 && i < 10)
     {
         deuxiemeCouche(rubikube,ROUGE);
         EPrime(rubikube);
@@ -1095,7 +1095,7 @@ void mainDeuxiemeCouche(Face *rubikube[])
   tournerRubikubeVersBas(rubikube);
   tournerRubikubeVersGauche(rubikube);
   tournerRubikubeVersGauche(rubikube);
-  if (i == 100 || avant->tab[0][1].color != ROUGE || avant->tab[0][0].color != ROUGE || droite->tab[0][1].color != BLEU)
+  if (i == 10 || avant->tab[0][1].color != ROUGE || avant->tab[0][0].color != ROUGE || droite->tab[0][1].color != BLEU)
   {
     melangerRubikCube(rubikube);
     mainCroixBlanche(rubikube);
@@ -1161,7 +1161,7 @@ void mainCroixJaune(Face *rubikube[])
   tournerRubikubeVersGauche(rubikube);
   tournerRubikubeVersGauche(rubikube);
   int i = 0;
-  while (verifCroixJaune(rubikube) == 0 && i < 100)
+  while (verifCroixJaune(rubikube) == 0 && i < 10)
   {
     for (int i = 0; i < 4;i++)
     {
@@ -1174,7 +1174,7 @@ void mainCroixJaune(Face *rubikube[])
     }
     i++; 
   }
-  if (i == 100)
+  if (i == 10)
   {
     melangerRubikCube(rubikube);
     mainCroixBlanche(rubikube);
@@ -1199,7 +1199,6 @@ int verifExtremiteCroixJaune(Face *rubikube[])
 
 void faireExtremiteCroixJaune(Face *rubikube[],enum Color color)
 {
-  Face *droite = getFace(DROITE,rubikube);
   Face *gauche = getFace(GAUCHE,rubikube);
   Face *derriere = getFace(DERRIERE,rubikube);
   if (gauche->tab[0][1].color == color)
@@ -1246,7 +1245,7 @@ void faireExtremiteCroixJaune(Face *rubikube[],enum Color color)
 void mainExtremiteCroixJaune(Face *rubikube[])
 {
   int i = 0;
-  while (verifExtremiteCroixJaune(rubikube) == 0 && i < 100)
+  while (verifExtremiteCroixJaune(rubikube) == 0 && i < 10)
   {
     faireExtremiteCroixJaune(rubikube,ROUGE);
     tournerRubikubeVersDroite(rubikube);
@@ -1258,7 +1257,7 @@ void mainExtremiteCroixJaune(Face *rubikube[])
     tournerRubikubeVersDroite(rubikube);
     i++;
   }
-  if (i == 100)
+  if (i == 10)
   {
     melangerRubikCube(rubikube);
     mainCroixBlanche(rubikube);
@@ -1274,18 +1273,245 @@ void mainExtremiteCroixJaune(Face *rubikube[])
 
 int verifAngleJaune(Face *rubikube[])
 {
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *derriere = getFace(DERRIERE,rubikube);
   Face *haut = getFace(HAUT,rubikube);
-  if (haut->tab[0][0].val == 8 && haut->tab[0][2].val == 6 && haut->tab[2][0].val == 2 && haut->tab[2][2].val == 0)
+  if ((haut->tab[2][2].color == JAUNE && haut->tab[2][2].val == 0) || (avant->tab[0][2].color == JAUNE && avant->tab[0][2].val == 0) || (droite->tab[0][0].color == JAUNE && droite->tab[0][0].val == 0))
+  {
+    if ((haut->tab[2][0].color == JAUNE && haut->tab[2][0].val == 2) || (avant->tab[0][0].color == JAUNE && avant->tab[0][0].val == 0) || (gauche->tab[0][2].color == JAUNE && gauche->tab[0][2].val == 0))
+    {
+      if ((haut->tab[0][0].color == JAUNE && haut->tab[0][0].val == 8) || (derriere->tab[0][2].color == JAUNE && derriere->tab[0][2].val == 8) || (gauche->tab[0][0].color == JAUNE && gauche->tab[0][0].val == 8))
+      {
+        if ((haut->tab[0][2].color == JAUNE && haut->tab[0][2].val == 6) || (derriere->tab[0][0].color == JAUNE && derriere->tab[0][0].val == 6) || (droite->tab[0][2].color == JAUNE && droite->tab[0][2].val == 6))
+        {
+          return 1;
+        }
+      }
+    }
+  }
+  return 0;
+}
+
+void algoAngleJaune(Face *rubikube[])
+{
+  U(rubikube);
+  R(rubikube);
+  UPrime(rubikube);
+  LPrime(rubikube);
+  U(rubikube);
+  RPrime(rubikube);
+  UPrime(rubikube);
+  L(rubikube);
+}
+
+void faireAngleJaune(Face *rubikube[])
+{
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *derriere = getFace(DERRIERE,rubikube);
+  Face *haut = getFace(HAUT,rubikube);
+  if ((haut->tab[2][2].color == JAUNE && haut->tab[2][2].val == 0) || (avant->tab[0][2].color == JAUNE && avant->tab[0][2].val == 0) || (droite->tab[0][0].color == JAUNE && droite->tab[0][0].val == 0))
+  {
+    algoAngleJaune(rubikube);
+  } else if ((haut->tab[2][0].color == JAUNE && haut->tab[2][0].val == 2) || (avant->tab[0][0].color == JAUNE && avant->tab[0][0].val == 0) || (gauche->tab[0][2].color == JAUNE && gauche->tab[0][2].val == 0))
+  {
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    algoAngleJaune(rubikube);
+  } else if ((haut->tab[0][0].color == JAUNE && haut->tab[0][0].val == 8) || (derriere->tab[0][2].color == JAUNE && derriere->tab[0][2].val == 8) || (gauche->tab[0][0].color == JAUNE && gauche->tab[0][0].val == 8))
+  {
+    tournerRubikubeVersDroite(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    algoAngleJaune(rubikube);
+  } else if ((haut->tab[0][2].color == JAUNE && haut->tab[0][2].val == 6) || (derriere->tab[0][0].color == JAUNE && derriere->tab[0][0].val == 6) || (droite->tab[0][2].color == JAUNE && droite->tab[0][2].val == 6))
+  {
+    tournerRubikubeVersDroite(rubikube);
+    algoAngleJaune(rubikube);
+  }
+  while (avant->tab[1][1].color != ROUGE)
+  {
+    tournerRubikubeVersDroite(rubikube);
+  }
+}
+
+
+void mainAngleJaune(Face *rubikube[])
+{
+  int index = 0;
+  while (verifAngleJaune(rubikube) == 0 && index < 10)
+  {
+    faireAngleJaune(rubikube);
+    index++;
+  }
+  if (index == 10)
+  {
+    melangerRubikCube(rubikube);
+    mainCroixBlanche(rubikube);
+    mainAngleFaceBlanche(rubikube);
+    mainDeuxiemeCouche(rubikube);
+    mainCroixJaune(rubikube);
+    mainExtremiteCroixJaune(rubikube);
+    mainAngleJaune(rubikube);
+  }
+}
+
+
+/* FIN DE LA FACE JAUNE */
+
+int verifFaceJaune(Face *rubikube[])
+{
+  Face *haut = getFace(HAUT,rubikube);
+  if (haut->tab[0][0].color == JAUNE && haut->tab[0][2].color == JAUNE && haut->tab[2][0].color == JAUNE && haut->tab[2][2].color == JAUNE)
   {
     return 1;
   }
   return 0;
 }
 
-void faireAngleJaune(Face *rubikube[])
+void algoFaceJaune(Face *rubikube[])
 {
-  
+  RPrime(rubikube);
+  DPrime(rubikube);
+  R(rubikube);
+  D(rubikube);
 }
+
+void faireFaceJaune(Face *rubikube[])
+{
+  Face *gauche = getFace(GAUCHE,rubikube);
+  Face *droite = getFace(DROITE,rubikube);
+  Face *avant = getFace(DEVANT,rubikube);
+  Face *derriere = getFace(DERRIERE,rubikube);
+  if (droite->tab[0][0].color == JAUNE && gauche->tab[0][2].color == JAUNE)
+  {
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    UPrime(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  } else if (avant->tab[0][0].color == JAUNE && avant->tab[0][2].color == JAUNE)
+  {
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    UPrime(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  } else if (avant->tab[0][0].color == JAUNE && droite->tab[0][0].color == JAUNE && derriere->tab[0][0].color == JAUNE)
+  {
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  } else if (gauche->tab[0][2].color == JAUNE && avant->tab[0][2].color == JAUNE && droite->tab[0][2].color == JAUNE)
+  {
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  } else if (gauche->tab[0][2].color == JAUNE && derriere->tab[0][0].color == JAUNE)
+  {
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  } else if (avant->tab[0][0].color == JAUNE && avant->tab[0][2].color == JAUNE && droite->tab[0][2].color == JAUNE && gauche->tab[0][0].color == JAUNE)
+  {
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  } else if (droite->tab[0][0].color == JAUNE && derriere->tab[0][0].color == JAUNE && derriere->tab[0][2].color == JAUNE && gauche->tab[0][2].color == JAUNE)
+  {
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    algoFaceJaune(rubikube);
+    U(rubikube);
+  }
+}
+
+void mainFaceJaune(Face *rubikube[])
+{
+  Face *avant = getFace(DEVANT,rubikube);
+  while (verifFaceJaune(rubikube) == 0)
+  {
+    faireFaceJaune(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    faireFaceJaune(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    faireFaceJaune(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+    faireFaceJaune(rubikube);
+    tournerRubikubeVersDroite(rubikube);
+  }
+  tournerRubikubeVersBas(rubikube);
+  tournerRubikubeVersBas(rubikube);
+  while (avant->tab[1][1].color != ROUGE)
+  {
+    tournerRubikubeVersDroite(rubikube);
+  }
+}
+
+
+
+
  
 
 
