@@ -1,12 +1,12 @@
-# Projet RubikCube :
+# Project - rubik 3x3 in C
 
-- Equipe : Louis VANOISE & Paul LEBLOND
+Year : 2021 (L3)
 
-<!-- ## To open the graphical interface :
+Team : Louis and Paul 
 
-_Install gtk with brew :_
+# Subject : make a rubik, mix it and finish it
 
-    > brew install gtk+3
-    > make -->
+***STARTING THE GAME***
 
-https://cubesolve.com/comment-resoudre-le-cube-rubik-fr/
+    - Go to the directory "rubik2x2"
+    - Open terminal and writing make to use makefile. (The rubik should launch in the terminal with a information menu)
